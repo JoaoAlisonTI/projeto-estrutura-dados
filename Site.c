@@ -1,8 +1,8 @@
 #include <stdio.h>
-#include <Site.h>
+#include "Site.h"
 #include <string.h>
 
-Site *Site_create(char *nome, char palavras[][30], int qtdPalavras, int importancia){
+Site *Site_create(char *nome, char palavras[][30], int qtdPalavras){
     Site *s = malloc(sizeof(Site));
     if(s == NULL){
         printf("Erro ao alocar memória para Site.\n");
@@ -19,7 +19,7 @@ Site *Site_create(char *nome, char palavras[][30], int qtdPalavras, int importan
     }
 
     //importancia
-    s->importancia = importancia;
+    s->importancia = 0;
 
     return s;
 }
@@ -68,4 +68,37 @@ void Graph_insertLink(Graph *g, Site *origem, Site *destino){
     }
 
     Graph_insertEdge(g, v1->label, v2->label, NULL);
+}
+
+void Graph_calcularImportancia(Graph *g){
+    if(g == NULL) return;
+
+    Vertex *vAtual = g->first;
+
+    //para cada vertice do gráfico
+    while(vAtual){
+
+        int grauEntrada = 0;
+        Vertex *vAux = g->first;
+
+        //percorre todos os vertices procurando arestas que apontam para vAtual
+        while(vAux){
+            Edge *e = vAux->first;
+
+            while(e){
+                if(e->head == vAtual){
+                    grauEntrada++;
+                }
+                e = e->next;
+            }
+            vAux = vAux->next;
+        }
+
+        //atualiza a importância do site
+        Site *site = (Site*) vAtual->value;
+        site->importancia = grauEntrada;
+
+        vAtual = vAtual->next;
+
+    }
 }
