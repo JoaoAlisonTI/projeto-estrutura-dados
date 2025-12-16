@@ -18,5 +18,6 @@ void  Graph_insertLink(Graph *g, Site *origem, Site *destino, int p);
 void  Graph_calcularImportancia(Graph *g);
 void  imprimirImportancia(Graph *g);
 void  graph_lerArquivo(Graph *g, const char *nomeArquivo);
+List *buscarSitesPorPalavra(Graph *g, char *termo);
 
 #endif
